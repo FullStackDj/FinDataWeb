@@ -1,9 +1,10 @@
 import {useParams} from "react-router-dom";
 
-interface Props {}
+interface Props {
+}
 
 const CompanyPage = (props: Props) => {
-  const { ticker } = useParams();
+  const {ticker} = useParams();
 
   return (
     <div>Company Page for: {ticker}</div>
