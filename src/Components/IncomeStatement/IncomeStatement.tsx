@@ -1,4 +1,8 @@
+import {useEffect, useState} from "react";
+import {useOutletContext} from "react-router-dom";
 import {CompanyIncomeStatement} from "../../company";
+import {getIncomeStatement} from "../../api";
+import Table from "../Table/Table";
 
 type Props = {};
 
@@ -59,9 +63,23 @@ const configs = [
 ];
 
 const IncomeStatement = (props: Props) => {
-  return (
-    <div>IncomeStatement</div>
-  );
+  const ticker = useOutletContext<string>();
+  const [incomeStatement, setIncomeStatement] = useState<CompanyIncomeStatement[]>();
+  useEffect(() => {
+    const incomeStatementFetch = async () => {
+      const result = await getIncomeStatement(ticker);
+      setIncomeStatement(result!.data);
+    };
+    incomeStatementFetch();
+  }, []);
+  return <>{incomeStatement ? (
+    <>
+      <Table config={configs} data={incomeStatement}/>
+    </>
+  ) : (
+    <>Loading</>
+  )}
+  </>;
 };
 
 export default IncomeStatement;
