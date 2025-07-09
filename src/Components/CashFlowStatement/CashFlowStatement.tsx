@@ -1,4 +1,8 @@
+import {useEffect, useState} from "react";
+import {useOutletContext} from "react-router-dom";
+import {getCashFlowStatement} from "../../api";
 import {CompanyCashFlow} from "../../company";
+import Table from "../Table/Table";
 
 type Props = {};
 
@@ -40,7 +44,21 @@ const config = [
 ];
 
 const CashFlowStatement = (props: Props) => {
+  const ticker = useOutletContext<string>();
+  const [cashflowData, setCashflow] = useState<CompanyCashFlow[]>();
+  useEffect(() => {
+    const fetchCashflow = async () => {
+      const result = await getCashFlowStatement(ticker!);
+      setCashflow(result!.data);
+    };
+    fetchCashflow();
+  }, []);
   return <>
+    {cashflowData ? (
+      <Table config={config} data={cashflowData}/>
+    ) : (
+      <h1>No results</h1>
+    )}
   </>;
 };
 
