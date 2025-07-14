@@ -4,6 +4,7 @@ import {getCashFlowStatement} from "../../api";
 import {CompanyCashFlow} from "../../company";
 import Table from "../Table/Table";
 import Spinner from "../Spinner/Spinner";
+import {formatLargeMonetaryNumber} from "../../Helpers/NumberFormating";
 
 type Props = {};
 
@@ -14,33 +15,40 @@ const config = [
   },
   {
     label: "Operating cashflow",
-    render: (company: CompanyCashFlow) => company.operatingCashFlow,
+    render: (company: CompanyCashFlow) =>
+      formatLargeMonetaryNumber(company.operatingCashFlow),
   },
   {
     label: "Investing cashflow",
     render: (company: CompanyCashFlow) =>
-      company.netCashUsedForInvestingActivites,
+      formatLargeMonetaryNumber(company.netCashUsedForInvestingActivites),
   },
   {
     label: "Financing cashflow",
     render: (company: CompanyCashFlow) =>
-      company.netCashUsedProvidedByFinancingActivities,
+      formatLargeMonetaryNumber(
+        company.netCashUsedProvidedByFinancingActivities
+      ),
   },
   {
-    label: "Cash at ed of period",
-    render: (company: CompanyCashFlow) => company.cashAtEndOfPeriod,
+    label: "Cash at end of period",
+    render: (company: CompanyCashFlow) =>
+      formatLargeMonetaryNumber(company.cashAtEndOfPeriod),
   },
   {
-    label: "Capital expenditure",
-    render: (company: CompanyCashFlow) => company.capitalExpenditure,
+    label: "Capital Expenditure",
+    render: (company: CompanyCashFlow) =>
+      formatLargeMonetaryNumber(company.capitalExpenditure),
   },
   {
     label: "Issuance of stock",
-    render: (company: CompanyCashFlow) => company.commonStockIssued,
+    render: (company: CompanyCashFlow) =>
+      formatLargeMonetaryNumber(company.commonStockIssued),
   },
   {
-    label: "Free cash flow",
-    render: (company: CompanyCashFlow) => company.freeCashFlow,
+    label: "Free cashflow",
+    render: (company: CompanyCashFlow) =>
+      formatLargeMonetaryNumber(company.freeCashFlow),
   },
 ];
 
