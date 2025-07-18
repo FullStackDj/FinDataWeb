@@ -1,11 +1,15 @@
-import {UserProfile} from "../Models/User";
 import React, {createContext, useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
 import axios from "axios";
+import {toast} from "react-toastify";
+import {useNavigate} from "react-router-dom";
+import {loginAPI, registerAPI} from "../Services/AuthService";
+import {UserProfile} from "../Models/User";
 
 type UserContextType = {
   user: UserProfile | null;
   token: string | null;
+  registerUser: (email: string, username: string, password: string) => void;
+  loginUser: (username: string, password: string) => void;
   logout: () => void;
   isLoggedIn: () => boolean;
 };
@@ -32,6 +36,39 @@ export const UserProvider = ({children}: Props) => {
     setIsReady(true);
   }, []);
 
+  const registerUser = async (email: string, username: string, password: string) => {
+    await registerAPI(email, username, password).then((res) => {
+      if (res) {
+        localStorage.setItem("token", res?.data.token);
+        const userObj = {
+          userName: res?.data.userName,
+          email: res?.data.email
+        }
+        localStorage.setItem("user", JSON.stringify(userObj));
+        setToken(res?.data.token!);
+        setUser(userObj!);
+        toast.success("Login success");
+        navigate("/search");
+      }
+    }).catch((e) => toast.warning("Server error occurred"))
+  }
+  const loginUser = async (username: string, password: string) => {
+    await loginAPI(username, password).then((res) => {
+      if (res) {
+        localStorage.setItem("token", res?.data.token);
+        const userObj = {
+          userName: res?.data.userName,
+          email: res?.data.email
+        }
+        localStorage.setItem("user", JSON.stringify(userObj));
+        setToken(res?.data.token!);
+        setUser(userObj!);
+        toast.success("Login success");
+        navigate("/search");
+      }
+    }).catch((e) => toast.warning("Server error occurred"))
+  }
+
   const isLoggedIn = () => {
     return !!user;
   };
@@ -41,14 +78,14 @@ export const UserProvider = ({children}: Props) => {
     localStorage.removeItem("user");
     setUser(null);
     setToken("");
-    navigate("/");
-  };
+    navigate("/")
+  }
 
   return (
-    <UserContext.Provider value={{user, token, logout, isLoggedIn}}>
+    <UserContext.Provider value={{loginUser, user, token, logout, isLoggedIn, registerUser}}>
       {isReady ? children : null}
     </UserContext.Provider>
-  );
-};
+  )
+}
 
 export const useAuth = () => React.useContext(UserContext);
