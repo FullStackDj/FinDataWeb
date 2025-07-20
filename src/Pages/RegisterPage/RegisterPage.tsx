@@ -5,23 +5,27 @@ import {useAuth} from "../../Context/useAuth";
 
 type Props = {};
 
-type LoginFormsInputs = {
+type RegisterFormsInputs = {
   userName: string;
+  email: string;
   password: string;
 }
 
 const validation = Yup.object().shape({
   userName: Yup.string().required("Username is required"),
+  email: Yup.string().required("Email is required"),
   password: Yup.string().required("Password is required"),
 })
 
-const LoginPage = (props: Props) => {
-  const {loginUser} = useAuth();
-  const {register, handleSubmit, formState: {errors}} = useForm<LoginFormsInputs>({resolver: yupResolver(validation)});
+const RegisterPage = (props: Props) => {
+  const {registerUser} = useAuth();
+  const {register, handleSubmit, formState: {errors}} =
+    useForm<RegisterFormsInputs>({resolver: yupResolver(validation)});
 
-  const handleLogin = (form: LoginFormsInputs) => {
-    loginUser(form.userName, form.password);
+  const handleLogin = (form: RegisterFormsInputs) => {
+    registerUser(form.email, form.userName, form.password);
   }
+
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -47,6 +51,22 @@ const LoginPage = (props: Props) => {
                   {...register("userName")}
                 />
                 {errors.userName ? <p className="text-white">{errors.userName.message}</p> : ""}
+              </div>
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Email"
+                  {...register("email")}
+                />
+                {errors.email ? <p className="text-white">{errors.email.message}</p> : ""}
               </div>
               <div>
                 <label
@@ -95,4 +115,4 @@ const LoginPage = (props: Props) => {
   )
 };
 
-export default LoginPage;
+export default RegisterPage;
