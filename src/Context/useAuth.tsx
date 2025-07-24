@@ -61,6 +61,7 @@ export const UserProvider = ({children}: Props) => {
           email: res?.data.email
         }
         localStorage.setItem("user", JSON.stringify(userObj));
+        axios.defaults.headers.common["Authorization"] = "Bearer " + res?.data.token;
         setToken(res?.data.token!);
         setUser(userObj!);
         toast.success("Login success");

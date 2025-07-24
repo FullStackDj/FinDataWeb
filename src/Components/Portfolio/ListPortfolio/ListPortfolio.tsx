@@ -1,9 +1,9 @@
 import CardPortfolio from "../CardPortfolio/CardPortfolio";
-import {SyntheticEvent} from "react";
+import {PortfolioGet} from "../../../Models/Portfolio";
 
 interface Props {
-  portfolioValues: string[];
-  onPortfolioDelete: (e: SyntheticEvent) => void;
+  portfolioValues: PortfolioGet[];
+  onPortfolioDelete: (symbol: string) => void;
 }
 
 const ListPortfolio = ({portfolioValues, onPortfolioDelete}: Props) => {
@@ -20,7 +20,7 @@ const ListPortfolio = ({portfolioValues, onPortfolioDelete}: Props) => {
               return (
                 <CardPortfolio
                   portfolioValue={portfolioValue}
-                  onPortfolioDelete={onPortfolioDelete}
+                  onPortfolioDelete={() => onPortfolioDelete(portfolioValue.symbol)}
                 />
               );
             })
